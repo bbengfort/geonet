@@ -1,0 +1,6 @@
+# GeoNet Configuration File
+# Store in ~/.geonet/config.yml
+
+# Basic Settings
+debug: true
+timezone: 'UTC'
