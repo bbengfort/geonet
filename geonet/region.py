@@ -46,6 +46,20 @@ class Region(Resource):
     REQUIRED_KEYS = ['Endpoint', 'RegionName']
     EXTRA_KEYS = ['LocaleName']
 
+    @staticmethod
+    def from_name(name):
+        """
+        Load a region from a region name by loading all the region fixtures
+        and finding the one that matches the RegionName or LocaleName keys.
+
+        Raises a LookupError if the region could not be found.
+        """
+        regions = Regions.load()
+        region = regions.find(name)
+        if region is None:
+            raise LookupError("no region named '{}' found".format(name))
+        return region
+
     def __init__(self, *args, **kwargs):
         self._conn = kwargs.pop('conn', None)
         super(Region, self).__init__(*args, **kwargs)
@@ -181,7 +195,20 @@ class Regions(Collection):
             json.dump(data, f, cls=Encoder, indent=2)
 
     def sortby(self, key, reverse=False):
+        """
+        Sort the region by the specified key
+        """
         self.items.sort(key=itemgetter(key), reverse=reverse)
+
+    def find(self, name):
+        """
+        Find a region by RegionName or by LocaleName. Returns None if no key
+        with the specified name could be found. Is case sensitive.
+        """
+        for region in self:
+            if name == region["RegionName"] or name == region.locale:
+                return region
+        return None
 
 
 if __name__ == '__main__':
@@ -191,6 +218,6 @@ if __name__ == '__main__':
     region  = regions[settings.aws.aws_region]
 
     # print(to_json(region.key_pairs(), indent=2))
-    # print(to_json(region.instances(), indent=2))
+    print(to_json(region.instances(), indent=2))
     # print(to_json(region.images(), indent=2))
     # print(to_json(region.security_groups(), indent=2))

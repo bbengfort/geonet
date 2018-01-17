@@ -21,6 +21,7 @@ from geonet.config import settings
 from geonet.base import Resource, Collection
 
 from collections import defaultdict
+from operator import itemgetter, attrgetter
 
 
 ##########################################################################
@@ -48,6 +49,8 @@ def connect(region=None, **kwargs):
 
 class Instance(Resource):
 
+    REQUIRED_KEYS = ['State', 'Tags']
+
     PENDING       = 'pending'
     RUNNING       = 'running'
     SHUTTING_DOWN = 'shutting-down'
@@ -61,6 +64,27 @@ class Instance(Resource):
         Returns the instances current state
         """
         return self['State']['Name']
+
+    @property
+    def name(self):
+        """
+        Figures out the instance name by first looking in the tags, then
+        returning the public or private IP address.
+        """
+        for tag in self.data.get('Tags', []):
+            if tag["Key"] == "Name":
+                return tag["Value"]
+
+        lookups = (
+            "PublicDnsName", "PublicIpAddress",
+            "PrivateDnsName", "PrivateIpAddress"
+        )
+
+        for key in lookups:
+            if key in self:
+                return self[key]
+
+        return ""
 
 
 class Instances(Collection):
@@ -94,6 +118,13 @@ class Instances(Collection):
         """
         return self.with_states(Instance.RUNNING)
 
+    def sortby(self, key, reverse=False):
+        """
+        Sort the instances by the specified key
+        """
+        attrs = frozenset(('name', 'state'))
+        func = attrgetter(key) if key in attrs else itemgetter(key)
+        self.items.sort(key=func, reverse=reverse)
 
 
 ##########################################################################
