@@ -45,8 +45,16 @@ load_dotenv()
 
 
 ##########################################################################
-## Primary Coinfiguration
+## Primary Configuration
 ##########################################################################
+
+class AWSAccessConfiguration(Configuration):
+
+    aws_owner_id          = environ_setting("AWS_OWNER_ID", required=False, default="")
+    aws_access_key_id     = environ_setting("AWS_ACCESS_KEY_ID", required=True)
+    aws_secret_access_key = environ_setting("AWS_SECRET_ACCESS_KEY", required=True)
+    aws_region            = environ_setting("AWS_REGION", required=True)
+
 
 class GeoNetConfiguration(Configuration):
 
@@ -59,6 +67,11 @@ class GeoNetConfiguration(Configuration):
     # Default configuration
     debug    = True  # print warnings
     timezone = "UTC" # timezone for datetimes
+    regions  = []    # regions to deploy replicas in
+
+    # AWS Access Configuration
+    aws = AWSAccessConfiguration()
+
 
 
 ##########################################################################

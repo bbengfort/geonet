@@ -4,3 +4,21 @@
 # Basic Settings
 debug: true
 timezone: 'UTC'
+
+# List regions to deploy replicas in
+regions: []
+
+# AWS Access Configuration (required)
+aws:
+  # Leave commented out and set $AWS_OWNER_ID
+  #aws_owner_id: null
+
+  # Leave commented out and set $AWS_ACCESS_KEY_ID
+  #aws_access_key_id: null
+
+  # Leave commented out and set $AWS_SECRET_ACCESS_KEY
+  #aws_secret_access_key: null
+
+  # Default region to connect to if no region is specified
+  # Leave commented out and set $AWS_REGION
+  #aws_region: null

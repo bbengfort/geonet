@@ -42,8 +42,7 @@ class ConfigCommand(Command):
         """
         Handles the config command with arguments from the command line.
         """
-        if args.edit:
-            self.edit()
+        if args.edit: self.edit()
 
         settings = GeoNetConfiguration.load()
         return str(settings)
