@@ -122,7 +122,7 @@ class DescribeCommand(Command):
             ])
 
             table.append([
-                group.region, str(group), group.name, ports
+                group.region.name, str(group), group.name, ports
             ])
 
         print(tabulate(table, tablefmt=args.format, headers='firstrow'))
@@ -140,7 +140,8 @@ class DescribeCommand(Command):
         table = [["Region", "Template", "Name", "Version"]]
         for template in templates:
             table.append([
-                template.region, str(template), template.name, template.version
+                template.region.name, str(template), template.name,
+                template.version
             ])
 
         print(tabulate(table, tablefmt=args.format, headers='firstrow'))
@@ -157,7 +158,7 @@ class DescribeCommand(Command):
         table = [["Region", "AMI", "Name", "Size", "Disk"]]
         for image in images:
             table.append([
-                image.region, str(image), image.name, image.size, image.disk
+                image.region.name, str(image), image.name, image.size, image.disk
             ])
 
         print(tabulate(table, tablefmt=args.format, headers='firstrow'))
@@ -175,7 +176,7 @@ class DescribeCommand(Command):
 
         for key in pairs:
             table.append([
-                key.region, key.name, key.fingerprint,
+                key.region.name, key.name, key.fingerprint,
                 CHECKS[key.has_valid_key()]
             ])
 

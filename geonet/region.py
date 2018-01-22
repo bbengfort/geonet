@@ -94,11 +94,12 @@ class Region(Resource):
     @property
     def conn(self):
         if self._conn is None:
-            tries = 0
-            while self._conn is None and tries < 3:
+            for tries in range(4):
                 try:
                     self._conn = connect(self)
+                    break
                 except:
+                    if tries >= 3: raise
                     self._conn = None
         return self._conn
 

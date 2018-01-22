@@ -18,9 +18,11 @@ from .config import ConfigCommand
 from .status import StatusCommand
 from .regions import RegionsCommand
 from .descr import DescribeCommand
+from .template import TemplateCommand
 
 
 # List of all commands
 COMMANDS = [
-    ConfigCommand, StatusCommand, RegionsCommand, DescribeCommand
+    ConfigCommand, StatusCommand, RegionsCommand, DescribeCommand,
+    TemplateCommand,
 ]

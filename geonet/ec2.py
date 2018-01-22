@@ -19,6 +19,7 @@ import boto3
 
 from geonet.config import settings
 from geonet.base import Resource, Collection
+from geonet.utils.timez import parse_datetime
 
 from collections import defaultdict
 from operator import itemgetter, attrgetter
@@ -170,6 +171,15 @@ class KeyPairs(Collection):
 
     RESOURCE = KeyPair
 
+    def get_alia_keys(self):
+        """
+        Returns any key pairs prefixed by alia.
+        """
+        return [
+            key for key in self
+            if key.name.startswith("alia")
+        ]
+
 
 ##########################################################################
 ## Launch Templates
@@ -197,6 +207,10 @@ class LaunchTemplates(Collection):
 
     RESOURCE = LaunchTemplate
 
+    def sort_latest(self):
+        self.items.sort(key=itemgetter("CreateTime"), reverse=True)
+        return self
+
 
 ##########################################################################
 ## Images
@@ -204,7 +218,7 @@ class LaunchTemplates(Collection):
 
 class Image(Resource):
 
-    REQUIRED_KEYS = None
+    REQUIRED_KEYS = ["ImageId", "BlockDeviceMappings", "CreationDate"]
     EXTRA_KEYS    = None
     EXTRA_DEFAULT = None
 
@@ -222,6 +236,10 @@ class Image(Resource):
         # TODO: make this less fragile
         return self["BlockDeviceMappings"][0]["Ebs"]["VolumeType"]
 
+    @property
+    def created(self):
+        return parse_datetime(self["CreationDate"])
+
     def __str__(self):
         return self["ImageId"]
 
@@ -229,6 +247,19 @@ class Image(Resource):
 class Images(Collection):
 
     RESOURCE = Image
+
+    def sort_latest(self):
+        self.items.sort(key=attrgetter("created"), reverse=True)
+        return self
+
+    def get_alia_images(self):
+        """
+        Returns any images prefixed by alia.
+        """
+        return [
+            image for image in self
+            if image.name.startswith("alia")
+        ]
 
 
 ##########################################################################
@@ -279,3 +310,12 @@ class SecurityGroup(Resource):
 class SecurityGroups(Collection):
 
     RESOURCE = SecurityGroup
+
+    def get_alia_groups(self):
+        """
+        Returns any security groups prefixed by alia.
+        """
+        return [
+            group for group in self
+            if group.name.startswith("alia")
+        ]
