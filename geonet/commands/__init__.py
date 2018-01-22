@@ -17,9 +17,10 @@ Commands for the GeoNet CLI Utility
 from .config import ConfigCommand
 from .status import StatusCommand
 from .regions import RegionsCommand
+from .descr import DescribeCommand
 
 
 # List of all commands
 COMMANDS = [
-    ConfigCommand, StatusCommand, RegionsCommand
+    ConfigCommand, StatusCommand, RegionsCommand, DescribeCommand
 ]

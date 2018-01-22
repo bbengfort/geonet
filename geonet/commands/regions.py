@@ -17,13 +17,16 @@ Gets information about the regions currently configured.
 
 import os
 
+from commis import color
 from commis import Command
 from tabulate import tabulate
-from geonet.config import settings
 from geonet.ec2 import connect, Instance
 from geonet.utils.editor import edit_file
 from geonet.utils.serialize import to_json
 from geonet.region import Regions, REGIONDATA
+
+
+CHECKMARK = color.format(u"✓", color.LIGHT_GREEN)
 
 
 ##########################################################################
@@ -169,7 +172,7 @@ class RegionsCommand(Command):
 
         # Make human readable
         for item in report:
-            item['Used'] = u"✓" if item['Used'] else ""
+            item['Used'] = CHECKMARK if item['Used'] else ""
 
         # Tabulate the report and print
         table = [headers]

@@ -15,13 +15,14 @@ Base classes for handling Amazon resources.
 ##########################################################################
 
 from geonet.exceptions import ValidationError
+from collections import MutableMapping, MutableSequence
 
 
 ##########################################################################
 ## Collection and Resources
 ##########################################################################
 
-class Resource(object):
+class Resource(MutableMapping):
     """
     A resource represents an individual item dictionary loaded from boto
     responses or JSON on disk and can include extra meta data. The resource
@@ -42,11 +43,12 @@ class Resource(object):
         self.region = region
         self.validate()
 
-    def serialize(self):
-        data = self.data.copy()
-        if self.region:
-            data["Region"] = str(self.region)
-        return data
+    @property
+    def name(self):
+        for tag in self.data.get('Tags', []):
+            if tag["Key"] == "Name":
+                return tag["Value"]
+        return None
 
     def validate(self):
         for key in self.REQUIRED_KEYS or []:
@@ -61,24 +63,37 @@ class Resource(object):
             if key not in self.data:
                 self.data[key] = self.EXTRA_DEFAULT
 
+    def serialize(self):
+        data = self.data.copy()
+        if self.region:
+            data["Region"] = str(self.region)
+        return data
+
     def __getitem__(self, key):
         return self.data[key]
 
     def __setitem__(self, key, val):
         self.data[key] = val
 
-    def __contains__(self, key):
-        return key in self.data
+    def __delitem__(self, key):
+        del self.data[key]
+
+    def __len__(self):
+        return len(self.data)
 
     def __iter__(self):
-        for key, val in self.data.items():
-            yield key, val
+        for key in self.data:
+            yield key
+
+    def __repr__(self):
+        return "<{} in {}>".format(self.__class__.__name__, self.region)
 
     def __str__(self):
-        return str(self.data)
+        if self.name: return self.name
+        return repr(self)
 
 
-class Collection(object):
+class Collection(MutableSequence):
     """
     A collection of items loaded from boto responses or JSON on disk and can
     include extra meta data. Collections act half way between a list and a
@@ -87,18 +102,41 @@ class Collection(object):
 
     RESOURCE = Resource
 
+    @classmethod
+    def collect(klass, collections, **meta):
+        """
+        Collect many smaller collections into one big one. Typical usage:
+
+            things = Things.collect(region.things() for region in regions)
+
+        To create a single collection from multiple regions. s
+        """
+        container = klass([], **meta)
+        for collection in collections:
+            container += collection
+        return container
+
     def __init__(self, data, region=None, **meta):
         if isinstance(data, dict):
             data = data.values()
-        self.items = [self.RESOURCE(row, region) for row in data]
+        self.region = region
+        self.items = [self._make_resource(row) for row in data]
         self.meta = meta
+
+    def _make_resource(self, item):
+        if isinstance(item, Resource):
+            return item
+        return self.RESOURCE(item, self.region)
+
+    def serialize(self):
+        return list(self)
+
+    def insert(self, idx, val):
+        val = self._make_resource(val)
+        return self.items.insert(idx, val)
 
     def __len__(self):
         return len(self.items)
-
-    def __iter__(self):
-        for item in self.items:
-            yield item
 
     def __getitem__(self, idx):
         if isinstance(idx, int):
@@ -113,8 +151,14 @@ class Collection(object):
             'no {} with index "{}" found'.format(self.RESOURCE.__name__, idx)
         )
 
-    def __contains__(self, item):
-        return item in self.items
+    def __setitem__(self, idx, val):
+        self.items[idx] = self._make_resource(val)
 
-    def serialize(self):
-        return list(self)
+    def __delitem__(self, idx):
+        del self.items[idx]
+
+    def __repr__(self):
+        s = "Collection of {} {}".format(len(self), self.__class__.__name__)
+        if self.region:
+            s += " in region {}".format(self.region)
+        return s

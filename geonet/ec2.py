@@ -14,7 +14,7 @@ Helpers for connecting to EC2 regions with boto
 ## Imports
 ##########################################################################
 
-import json
+import os
 import boto3
 
 from geonet.config import settings
@@ -49,7 +49,7 @@ def connect(region=None, **kwargs):
 
 class Instance(Resource):
 
-    REQUIRED_KEYS = ['State', 'Tags']
+    REQUIRED_KEYS = ('State', 'Tags')
 
     PENDING       = 'pending'
     RUNNING       = 'running'
@@ -133,9 +133,37 @@ class Instances(Collection):
 
 class KeyPair(Resource):
 
-    REQUIRED_KEYS = ['KeyName', 'KeyFingerprint']
+    REQUIRED_KEYS = ('KeyName', 'KeyFingerprint')
     EXTRA_KEYS    = None
     EXTRA_DEFAULT = None
+
+    @property
+    def name(self):
+        return self["KeyName"]
+
+    @property
+    def fingerprint(self):
+        return self["KeyFingerprint"]
+
+    def local_path(self, sshdir=None):
+        """
+        Returns the expected local path of the key in the specified directory.
+        If None is passed in, uses the default user SSH directory.
+        """
+        sshdir = sshdir or os.path.expanduser(os.path.join("~", ".ssh"))
+        return os.path.join(sshdir, "{}.pem".format(self.name))
+
+    def has_valid_key(self, sshdir=None):
+        """
+        Returns true if there is a key at the local path, its permisisons are
+        set to 0600.
+        """
+        # TODO: also verify fingerprint
+        path = self.local_path(sshdir)
+        if os.path.exists(path):
+            if oct(os.stat(path).st_mode & 0777) == '0600':
+                return True
+        return False
 
 
 class KeyPairs(Collection):
@@ -153,6 +181,17 @@ class LaunchTemplate(Resource):
     EXTRA_KEYS    = None
     EXTRA_DEFAULT = None
 
+    @property
+    def name(self):
+        return self["LaunchTemplateName"]
+
+    @property
+    def version(self):
+        return int(self["LatestVersionNumber"])
+
+    def __str__(self):
+        return self["LaunchTemplateId"]
+
 
 class LaunchTemplates(Collection):
 
@@ -169,6 +208,23 @@ class Image(Resource):
     EXTRA_KEYS    = None
     EXTRA_DEFAULT = None
 
+    @property
+    def name(self):
+        return self["Name"]
+
+    @property
+    def size(self):
+        # TODO: make this less fragile
+        return self["BlockDeviceMappings"][0]["Ebs"]["VolumeSize"]
+
+    @property
+    def disk(self):
+        # TODO: make this less fragile
+        return self["BlockDeviceMappings"][0]["Ebs"]["VolumeType"]
+
+    def __str__(self):
+        return self["ImageId"]
+
 
 class Images(Collection):
 
@@ -181,10 +237,44 @@ class Images(Collection):
 
 class SecurityGroup(Resource):
 
-    REQUIRED_KEYS = None
+    REQUIRED_KEYS = ["GroupId", "GroupName", "IpPermissions"]
     EXTRA_KEYS    = None
     EXTRA_DEFAULT = None
 
+    @property
+    def name(self):
+        return self["GroupName"]
+
+    def open_ip_permissions(self):
+        """
+        Return all permissions open to 0.0.0.0/0
+        """
+
+        def is_open(perm):
+            for rng in perm["IpRanges"]:
+                if rng["CidrIp"] == "0.0.0.0/0":
+                    return True
+            return False
+
+        for perm in self["IpPermissions"]:
+            if is_open(perm):
+                yield perm
+
+    def open_ports(self):
+        """
+        Returns ports open to world
+        """
+        for perm in self.open_ip_permissions():
+            fp = perm["FromPort"]
+            tp = perm["ToPort"]
+
+            if fp == tp:
+                yield fp
+            else:
+                yield (fp, tp)
+
+    def __str__(self):
+        return self["GroupId"]
 
 class SecurityGroups(Collection):
 

@@ -1,0 +1,1509 @@
+[
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-a04ea3cb"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-0faa7967", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "ap-south-1", 
+    "GroupId": "sg-a04ea3cb"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-52fd4b3b"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-9c79adf5", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "eu-west-3", 
+    "GroupId": "sg-52fd4b3b"
+  }, 
+  {
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "Description": "Security group for Alia replicas and clients.", 
+    "Tags": [
+      {
+        "Value": "ALIA-SG", 
+        "Key": "Name"
+      }
+    ], 
+    "Region": "eu-west-2", 
+    "IpPermissions": [
+      {
+        "PrefixListIds": [], 
+        "FromPort": 3264, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 3285, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": [
+          {
+            "CidrIpv6": "::/0"
+          }
+        ]
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 0, 
+        "IpRanges": [], 
+        "ToPort": 65535, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-49721a21"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 22, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 22, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 5356, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 5356, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 4157, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 4157, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "alia", 
+    "VpcId": "vpc-f70c819e", 
+    "OwnerId": "910826940034", 
+    "GroupId": "sg-49721a21"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-f1aaeb98"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-f70c819e", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "eu-west-2", 
+    "GroupId": "sg-f1aaeb98"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-c7c803bf"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-1dc66f7a", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "eu-west-1", 
+    "GroupId": "sg-c7c803bf"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-09543a62"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-18b82b70", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "ap-northeast-2", 
+    "GroupId": "sg-09543a62"
+  }, 
+  {
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "Description": "Security group for Alia replicas and clients.", 
+    "Tags": [
+      {
+        "Value": "ALIA-SG", 
+        "Key": "Name"
+      }
+    ], 
+    "Region": "ap-northeast-2", 
+    "IpPermissions": [
+      {
+        "PrefixListIds": [], 
+        "FromPort": 3264, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 3285, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": [
+          {
+            "CidrIpv6": "::/0"
+          }
+        ]
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 0, 
+        "IpRanges": [], 
+        "ToPort": 65535, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-da5739b1"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 22, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 22, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 5356, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 5356, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 4157, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 4157, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "ali", 
+    "VpcId": "vpc-18b82b70", 
+    "OwnerId": "910826940034", 
+    "GroupId": "sg-da5739b1"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-5163ef28"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-36bd6f51", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "ap-northeast-1", 
+    "GroupId": "sg-5163ef28"
+  }, 
+  {
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "Description": "Security group for Alia replicas and clients. ", 
+    "Tags": [
+      {
+        "Value": "ALIA-SG", 
+        "Key": "Name"
+      }
+    ], 
+    "Region": "sa-east-1", 
+    "IpPermissions": [
+      {
+        "PrefixListIds": [], 
+        "FromPort": 3264, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 3285, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": [
+          {
+            "CidrIpv6": "::/0"
+          }
+        ]
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 0, 
+        "IpRanges": [], 
+        "ToPort": 65535, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-a121e0c7"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 22, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 22, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 5356, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 5356, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 4157, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 4157, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "alia", 
+    "VpcId": "vpc-8949b3ee", 
+    "OwnerId": "910826940034", 
+    "GroupId": "sg-a121e0c7"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-ff23e299"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-8949b3ee", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "sa-east-1", 
+    "GroupId": "sg-ff23e299"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-340a6f5c"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-da7f73b3", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "ca-central-1", 
+    "GroupId": "sg-340a6f5c"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-60b1ab06"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-29ea364e", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "ap-southeast-1", 
+    "GroupId": "sg-60b1ab06"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-fcd6dd9a"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-8b45beec", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "ap-southeast-2", 
+    "GroupId": "sg-fcd6dd9a"
+  }, 
+  {
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "Description": "Security group for Alia replicas and clients.", 
+    "Tags": [
+      {
+        "Value": "ALIA-SG", 
+        "Key": "Name"
+      }
+    ], 
+    "Region": "ap-southeast-2", 
+    "IpPermissions": [
+      {
+        "PrefixListIds": [], 
+        "FromPort": 3264, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 3285, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": [
+          {
+            "CidrIpv6": "::/0"
+          }
+        ]
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 0, 
+        "IpRanges": [], 
+        "ToPort": 65535, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-fdd6dd9b"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 22, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 22, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 5356, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 5356, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 4157, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 4157, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "alia", 
+    "VpcId": "vpc-8b45beec", 
+    "OwnerId": "910826940034", 
+    "GroupId": "sg-fdd6dd9b"
+  }, 
+  {
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "Description": "Security group for Alia replicas and clients.", 
+    "Tags": [
+      {
+        "Value": "ALIA-SG", 
+        "Key": "Name"
+      }
+    ], 
+    "Region": "eu-central-1", 
+    "IpPermissions": [
+      {
+        "PrefixListIds": [], 
+        "FromPort": 3264, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 3285, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": [
+          {
+            "CidrIpv6": "::/0"
+          }
+        ]
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 0, 
+        "IpRanges": [], 
+        "ToPort": 65535, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-0ac7f560"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 22, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 22, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 5356, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 5356, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 4157, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 4157, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "alia", 
+    "VpcId": "vpc-90a66cfb", 
+    "OwnerId": "910826940034", 
+    "GroupId": "sg-0ac7f560"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-d7c4f6bd"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-90a66cfb", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "eu-central-1", 
+    "GroupId": "sg-d7c4f6bd"
+  }, 
+  {
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "Description": "default VPC security group", 
+    "Tags": [
+      {
+        "Value": "DEFAULT-SG", 
+        "Key": "Name"
+      }
+    ], 
+    "Region": "us-east-1", 
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-30e53e55"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "VpcId": "vpc-afea18ca", 
+    "OwnerId": "910826940034", 
+    "GroupId": "sg-30e53e55"
+  }, 
+  {
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "Description": "Security group for Alia replicas and clients.", 
+    "Tags": [
+      {
+        "Value": "ALIA-SG", 
+        "Key": "Name"
+      }
+    ], 
+    "Region": "us-east-1", 
+    "IpPermissions": [
+      {
+        "PrefixListIds": [], 
+        "FromPort": 3264, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 3285, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": [
+          {
+            "CidrIpv6": "::/0"
+          }
+        ]
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 0, 
+        "IpRanges": [], 
+        "ToPort": 65535, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-43b18432"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 22, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 22, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 5356, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 5356, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 4157, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 4157, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "alia", 
+    "VpcId": "vpc-afea18ca", 
+    "OwnerId": "910826940034", 
+    "GroupId": "sg-43b18432"
+  }, 
+  {
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "Description": "rules for the golda Hadoop/Spark cluster ", 
+    "Tags": [
+      {
+        "Value": "GOLDA-SG", 
+        "Key": "Name"
+      }
+    ], 
+    "Region": "us-east-1", 
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-649a0815"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 22, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 22, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": [
+          {
+            "CidrIpv6": "::/0"
+          }
+        ]
+      }
+    ], 
+    "GroupName": "golda-cluster", 
+    "VpcId": "vpc-afea18ca", 
+    "OwnerId": "910826940034", 
+    "GroupId": "sg-649a0815"
+  }, 
+  {
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "Description": "The stacks web application security group", 
+    "Tags": [
+      {
+        "Value": "STACKS-SG-PROD", 
+        "Key": "Name"
+      }
+    ], 
+    "Region": "us-east-1", 
+    "IpPermissions": [
+      {
+        "PrefixListIds": [], 
+        "FromPort": 80, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 80, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 5432, 
+        "IpRanges": [
+          {
+            "CidrIp": "108.31.4.53/32"
+          }, 
+          {
+            "CidrIp": "69.138.65.142/32"
+          }
+        ], 
+        "ToPort": 5432, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-76385b13"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 22, 
+        "IpRanges": [
+          {
+            "CidrIp": "108.31.4.53/32"
+          }, 
+          {
+            "CidrIp": "69.138.65.142/32"
+          }
+        ], 
+        "ToPort": 22, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 443, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 443, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "Stacks", 
+    "VpcId": "vpc-afea18ca", 
+    "OwnerId": "910826940034", 
+    "GroupId": "sg-76385b13"
+  }, 
+  {
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "Description": "Security group for Alia replicas and clients.", 
+    "Tags": [
+      {
+        "Value": "ALIA-SG", 
+        "Key": "Name"
+      }
+    ], 
+    "Region": "us-east-2", 
+    "IpPermissions": [
+      {
+        "PrefixListIds": [], 
+        "FromPort": 3264, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 3285, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": [
+          {
+            "CidrIpv6": "::/0"
+          }
+        ]
+      }, 
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-3b50a750"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 22, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 22, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 5356, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 5356, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 4157, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 4157, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "alia", 
+    "VpcId": "vpc-b9b3c0d0", 
+    "OwnerId": "910826940034", 
+    "GroupId": "sg-3b50a750"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-e0839689"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-b9b3c0d0", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "us-east-2", 
+    "GroupId": "sg-e0839689"
+  }, 
+  {
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "Description": "Security group for Alia replicas and clients.", 
+    "Tags": [
+      {
+        "Value": "ALIA-SG", 
+        "Key": "Name"
+      }
+    ], 
+    "Region": "us-west-1", 
+    "IpPermissions": [
+      {
+        "PrefixListIds": [], 
+        "FromPort": 3264, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 3285, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": [
+          {
+            "CidrIpv6": "::/0"
+          }
+        ]
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 0, 
+        "IpRanges": [], 
+        "ToPort": 65535, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-3310c14a"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 22, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 22, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 5356, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 5356, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }, 
+      {
+        "PrefixListIds": [], 
+        "FromPort": 4157, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 4157, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "alia", 
+    "VpcId": "vpc-b7e3fbd5", 
+    "OwnerId": "910826940034", 
+    "GroupId": "sg-3310c14a"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-9c07e5f9"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-b7e3fbd5", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "us-west-1", 
+    "GroupId": "sg-9c07e5f9"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "PrefixListIds": [], 
+        "FromPort": 80, 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "ToPort": 80, 
+        "IpProtocol": "tcp", 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default_elb_8de52fdc-f5cd-3bda-b5fd-42f66c9f3826", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-b7e3fbd5", 
+    "Description": "ELB created security group used when no security group is specified during ELB creation - modifications could impact traffic to future ELBs", 
+    "OwnerId": "910826940034", 
+    "Region": "us-west-1", 
+    "GroupId": "sg-e357b886"
+  }, 
+  {
+    "IpPermissions": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [], 
+        "UserIdGroupPairs": [
+          {
+            "UserId": "910826940034", 
+            "GroupId": "sg-9cdb29f9"
+          }
+        ], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "GroupName": "default", 
+    "IpPermissionsEgress": [
+      {
+        "IpProtocol": "-1", 
+        "PrefixListIds": [], 
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ], 
+        "UserIdGroupPairs": [], 
+        "Ipv6Ranges": []
+      }
+    ], 
+    "VpcId": "vpc-147d9a71", 
+    "Description": "default VPC security group", 
+    "OwnerId": "910826940034", 
+    "Region": "us-west-2", 
+    "GroupId": "sg-9cdb29f9"
+  }
+]

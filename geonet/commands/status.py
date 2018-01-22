@@ -19,8 +19,8 @@ from commis import color
 from commis import Command
 
 from geonet.ec2 import Instance
+from geonet.region import Regions
 from geonet.config import settings
-from geonet.region import Region, Regions
 
 
 ##########################################################################

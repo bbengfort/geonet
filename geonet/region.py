@@ -43,8 +43,8 @@ class Region(Resource):
     loaded from disk. This element should be a dictionary only.
     """
 
-    REQUIRED_KEYS = ['Endpoint', 'RegionName']
-    EXTRA_KEYS = ['LocaleName']
+    REQUIRED_KEYS = ('Endpoint', 'RegionName')
+    EXTRA_KEYS = ('LocaleName')
 
     @staticmethod
     def from_name(name):

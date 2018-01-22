@@ -18,8 +18,10 @@ import pytz
 
 from datetime import datetime
 from dateutil.parser import parse as strptime
+from dateutil.relativedelta import relativedelta
 
 from geonet.config import settings
+
 
 ##########################################################################
 ## Format constants
@@ -95,3 +97,23 @@ def resolve_timezone(timezone):
         return pytz.timezone(timezone)
 
     return timezone
+
+
+def humanizedelta(*args, **kwargs):
+    """
+    Wrapper around dateutil.relativedelta (same construtor args) and returns
+    a humanized string representing the delta in a meaningful way.
+    """
+    if 'milliseconds' in kwargs:
+        sec  = kwargs.get('seconds', 0)
+        msec = kwargs.pop('milliseconds')
+        kwargs['seconds'] = sec + (float(msec) / 1000.0)
+
+    delta = relativedelta(*args, **kwargs)
+    attrs = ('years', 'months', 'days', 'hours', 'minutes', 'seconds')
+    parts = [
+        '%d %s' % (getattr(delta, attr), getattr(delta, attr) > 1 and attr or attr[:-1])
+        for attr in attrs if getattr(delta, attr)
+    ]
+
+    return " ".join(parts)
