@@ -20,10 +20,11 @@ import json
 from geonet.ec2 import connect
 from geonet.config import settings
 from geonet.config import USERDATA
+from geonet.utils.async import wait
 from geonet.utils.serialize import Encoder
 from geonet.base import Collection, Resource
-from geonet.utils.timez import utcnow, parse_datetime
 from geonet.ec2 import KeyPairs,SecurityGroups
+from geonet.utils.timez import utcnow, parse_datetime
 from geonet.ec2 import Instances, Images, LaunchTemplates
 
 from operator import itemgetter
@@ -64,8 +65,17 @@ class Region(Resource):
         self._conn = kwargs.pop('conn', None)
         super(Region, self).__init__(*args, **kwargs)
 
+    def __repr__(self):
+        return "Region {} ({})".format(self, self.locale)
+
     def __str__(self):
         return self["RegionName"]
+
+    @property
+    def name(self):
+        if 'LocaleName' in self and self['LocaleName']:
+            return self['LocaleName']
+        return str(self)
 
     @property
     def locale(self):
@@ -84,7 +94,12 @@ class Region(Resource):
     @property
     def conn(self):
         if self._conn is None:
-            self._conn = connect(self)
+            tries = 0
+            while self._conn is None and tries < 3:
+                try:
+                    self._conn = connect(self)
+                except:
+                    self._conn = None
         return self._conn
 
     def is_configured(self):
@@ -174,6 +189,16 @@ class Regions(Collection):
             return klass(data["regions"], updated=updated)
 
     @classmethod
+    def load_active(klass, **kwargs):
+        """
+        Loads regions and filters active ones.
+        """
+        return klass([
+            region for region in klass.load(**kwargs)
+            if region.is_configured()
+        ])
+
+    @classmethod
     def fetch(klass, conn):
         """
         Fetch the region data from EC2 with the given connection
@@ -209,6 +234,48 @@ class Regions(Collection):
             if name == region["RegionName"] or name == region.locale:
                 return region
         return None
+
+    def instances(self, **kwargs):
+        """
+        Returns a collection of instances across all regions.
+        """
+        return Instances.collect(
+            wait((region.instances for region in self), kwargs=kwargs)
+        )
+
+    def key_pairs(self, **kwargs):
+        """
+        Returns the keys associated with the region.
+        """
+        return KeyPairs.collect(
+            wait((region.key_pairs for region in self), kwargs=kwargs)
+        )
+
+    def launch_templates(self, **kwargs):
+        """
+        Returns the launch templates associated with the region.
+        """
+        return LaunchTemplates.collect(
+            wait((region.launch_templates for region in self), kwargs=kwargs)
+        )
+
+    def images(self, **kwargs):
+        """
+        Returns the images associated with the region. By default this filters
+        the images that belong to the owner id set in the configuration file,
+        otherwise this will take a really long time and return many results.
+        """
+        return Images.collect(
+            wait((region.images for region in self), kwargs=kwargs)
+        )
+
+    def security_groups(self, **kwargs):
+        """
+        Returns the security groups associated with the region.
+        """
+        return SecurityGroups.collect(
+            wait((region.security_groups for region in self), kwargs=kwargs)
+        )
 
 
 if __name__ == '__main__':

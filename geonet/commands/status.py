@@ -58,7 +58,7 @@ class StatusCommand(Command):
         Handles the config command with arguments from the command line.
         """
         # Load the regions list
-        regions = Regions.load()
+        regions = Regions.load_active()
 
         for region in args.regions:
 

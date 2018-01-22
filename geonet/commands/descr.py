@@ -81,6 +81,9 @@ class DescribeCommand(Command):
         ('-T', '--timer'): {
             'action': 'store_true', 'help': 'print total request time',
         },
+        ('-R', '--all-regions'): {
+            'action': 'store_true', 'help': 'use all regions not just active ones',
+        },
         'resource': {
             'choices': (GROUPS, TEMPLATES, AMIS, KEYS), 'type': rtype,
             'help': 'name of resource type to describe',
@@ -91,8 +94,9 @@ class DescribeCommand(Command):
         """
         Handles the config command with arguments from the command line.
         """
+        self.regions = Regions.load() if args.all_regions else Regions.load_active()
+
         with Timer() as timer:
-            self.regions = Regions.load()
             method = "handle_{}".format(args.resource.replace("-", "_"))
             getattr(self, method)(args)
 
@@ -104,9 +108,7 @@ class DescribeCommand(Command):
         """
         Describe security groups in each region
         """
-        groups = SecurityGroups.collect(
-            region.security_groups() for region in self.regions
-        )
+        groups = self.regions.security_groups()
         if args.debug:
             print(to_json(groups, indent=2))
             return
@@ -130,9 +132,7 @@ class DescribeCommand(Command):
         """
         Describe launch templates in each region
         """
-        templates = LaunchTemplates.collect(
-            region.launch_templates() for region in self.regions
-        )
+        templates = self.regions.launch_templates()
         if args.debug:
             print(to_json(templates, indent=2))
             return
@@ -149,9 +149,7 @@ class DescribeCommand(Command):
         """
         Describe AMI images available in each region
         """
-        images = Images.collect(
-            region.images() for region in self.regions
-        )
+        images = self.regions.images()
         if args.debug:
             print(to_json(images, indent=2))
             return
@@ -168,9 +166,7 @@ class DescribeCommand(Command):
         """
         Describe key pairs available in each region
         """
-        pairs = KeyPairs.collect(
-            region.key_pairs() for region in self.regions
-        )
+        pairs = self.regions.key_pairs()
         if args.debug:
             print(to_json(pairs, indent=2))
             return
