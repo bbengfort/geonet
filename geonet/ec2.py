@@ -16,11 +16,13 @@ Helpers for connecting to EC2 regions with boto
 ##########################################################################
 
 import os
+import pytz
 import boto3
 
 from geonet.config import settings
 from geonet.base import Resource, Collection
 from geonet.utils.timez import parse_datetime
+from geonet.utils.timez import utcnow, humanizedelta
 
 from collections import defaultdict
 from operator import itemgetter, attrgetter
@@ -61,6 +63,10 @@ class Instance(Resource):
     STOPPING      = 'stopping'
     STOPPED       = 'stopped'
 
+    def __init__(self, *args, **kwargs):
+        super(Instance, self).__init__(*args, **kwargs)
+        self.status = None
+
     @property
     def state(self):
         """
@@ -88,6 +94,24 @@ class Instance(Resource):
                 return self[key]
 
         return ""
+
+    @property
+    def vm_type(self):
+        return self["InstanceType"]
+
+    @property
+    def ipaddr(self):
+        for key in ("PublicIpAddress", "PrivateIpAddress"):
+            if key in self:
+                return self[key]
+        return Nones
+
+    def uptime(self):
+        """
+        Returns the time since launch (not necessarily the time running)
+        """
+        delta = utcnow() - self["LaunchTime"]
+        return humanizedelta(seconds=delta.total_seconds())
 
     def __str__(self):
         return self["InstanceId"]
@@ -131,6 +155,23 @@ class Instances(Collection):
         attrs = frozenset(('name', 'state'))
         func = attrgetter(key) if key in attrs else itemgetter(key)
         self.items.sort(key=func, reverse=reverse)
+
+    def update_statuses(self):
+        """
+        Update the instance statuses for the given instances.
+        """
+        if not self.region or isinstance(self.region, basestring):
+            raise TypeError("cannot update status with no region connection")
+
+        # TODO: validate response
+        resp = self.region.conn.describe_instance_status(
+            InstanceIds = [str(instance) for instance in self],
+            IncludeAllInstances = False,
+        )
+
+        for status in resp["InstanceStatuses"]:
+            self[status["InstanceId"]].status = status
+
 
 
 ##########################################################################

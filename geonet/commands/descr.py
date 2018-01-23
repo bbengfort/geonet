@@ -32,6 +32,8 @@ TEMPLATES = "launch-templates"
 AMIS = "images"
 KEYS = "key-pairs"
 VOLUMES = "volumes"
+INSTANCES = "instances"
+
 
 # Checks
 CHECKS = {
@@ -68,20 +70,24 @@ def rtype(s):
     Compute aliases for the resource type
     """
     s = s.lower()
-    if s in {'s', 'sg', 'sgs', 'group', 'groups', 'security-group', GROUPS}:
-        return GROUPS
+
+    if s in {'m', 'machine', 'machines', 'vm', 'vms', 'instance', INSTANCES}:
+        return INSTANCES
+
+    if s in {'v', 'vols', 'volume', VOLUMES}:
+        return VOLUMES
 
     if s in {'t', 'template', 'templates', 'lt', 'launch-template', TEMPLATES}:
         return TEMPLATES
+
+    if s in {'s', 'sg', 'sgs', 'group', 'groups', 'security-group', GROUPS}:
+        return GROUPS
 
     if s in {'i', 'image', 'ami', 'amis', AMIS}:
         return AMIS
 
     if s in {'k', 'keys', 'key-pair', KEYS}:
         return KEYS
-
-    if s in {'v', 'vols', 'volume', VOLUMES}:
-        return VOLUMES
 
 
 ##########################################################################
@@ -109,7 +115,7 @@ class DescribeCommand(Command):
             'action': 'store_true', 'help': 'use all regions not just active ones',
         },
         'resource': {
-            'choices': (VOLUMES, GROUPS, TEMPLATES, AMIS, KEYS),
+            'choices': (INSTANCES, VOLUMES, GROUPS, TEMPLATES, AMIS, KEYS),
             'type': rtype, 'help': 'name of resource type to describe',
         },
     }
@@ -126,6 +132,24 @@ class DescribeCommand(Command):
 
         if args.timer:
             print("request took {}".format(timer))
+
+    def handle_instances(self, args):
+        """
+        Describe instances in each region
+        """
+        instances = self.regions.instances()
+        if args.debug:
+            print(to_json(instances, indent=2))
+
+        table = [["", "Region", "Instance", "Name", "Type", "IP Addr",]]
+
+        for instance in instances:
+            table.append([
+                STATES[instance.state], instance.region.name, str(instance),
+                instance.name, instance.vm_type, instance.ipaddr,
+            ])
+
+        print(tabulate(table, tablefmt=args.format, headers='firstrow'))
 
     def handle_volumes(self, args):
         """

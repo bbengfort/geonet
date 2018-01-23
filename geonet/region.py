@@ -244,13 +244,15 @@ class Regions(Collection):
                 return region
         return None
 
-    def instances(self, **kwargs):
+    def instances(self, status=False, **kwargs):
         """
-        Returns a collection of instances across all regions.
+        Returns a collection of instances across all regions. If status is
+        True then the status for all instances are also collected.
         """
-        return Instances.collect(
-            wait((region.instances for region in self), kwargs=kwargs)
-        )
+        instances = wait((region.instances for region in self), kwargs=kwargs)
+        if status:
+            wait((instance.update_statuses for instance in instances))
+        return Instances.collect(instances)
 
     def volumes(self, **kwargs):
         """

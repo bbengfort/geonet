@@ -24,6 +24,7 @@ from geonet.config import settings
 from geonet.utils.async import wait
 
 from functools import partial
+from tabulate import tabulate
 
 
 ##########################################################################
@@ -31,13 +32,16 @@ from functools import partial
 ##########################################################################
 
 LIGHTS = {
-    Instance.PENDING: color.format(u"●", color.YELLOW),
-    Instance.RUNNING: color.format(u"●", color.GREEN),
-    Instance.SHUTTING_DOWN: color.format(u"●", color.CYAN),
-    Instance.TERMINATED: color.format(u"●", color.BLUE),
-    Instance.STOPPING: color.format(u"●", color.LIGHT_RED),
-    Instance.STOPPED: color.format(u"●", color.RED),
+    Instance.PENDING: color.YELLOW,
+    Instance.RUNNING: color.GREEN,
+    Instance.SHUTTING_DOWN: color.CYAN,
+    Instance.TERMINATED: color.BLUE,
+    Instance.STOPPING: color.LIGHT_RED,
+    Instance.STOPPED: color.RED,
 }
+
+def instance_state_light(state):
+    return color.format(u"● {}", LIGHTS[state], state)
 
 
 ##########################################################################
@@ -61,31 +65,24 @@ class StatusCommand(Command):
         Handles the config command with arguments from the command line.
         """
         # Load the regions list
-        regions = Regions.load()
+        regions = Regions(
+            region for region in Regions.load()
+            if str(region) in args.regions
+        )
 
-        # Handle each region
-        for region in regions:
-            if str(region) not in args.regions: continue
+        # Load the instances
+        instances = regions.instances()
 
-            # Handle the status for the region
-            self.handle_region(region, args)
+        # Create the region table
+        table = [
+            [
+                instance_state_light(instance.state),
+                instance.region.name,
+                instance.name, str(instance),
+                instance.uptime()
 
+            ]
+            for instance in instances
+        ]
 
-    def handle_region(self, region, args):
-        """
-        Lists the instance in the specified region
-        """
-        output = []
-        instances = region.instances()
-        instances.sortby('name')
-
-        header = u"{} ({} instances)".format(region.locale, len(instances))
-        output.extend([header, "-"*len(header)])
-
-        for instance in instances:
-            output.append(
-                u"  {} {}".format(LIGHTS[instance.state], instance.name)
-            )
-
-        output.append("")
-        print("\n".join(output))
+        print(tabulate(table, tablefmt="plain"))
