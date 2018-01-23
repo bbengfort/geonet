@@ -17,14 +17,12 @@ Describes available resources and resource types
 
 from commis import color
 from commis import Command
+from tabulate import tabulate
+
 from geonet.region import Regions
 from geonet.utils.timer import Timer
 from geonet.ec2 import Instance, Volume
 from geonet.utils.serialize import to_json
-from geonet.ec2 import SecurityGroups, KeyPairs
-from geonet.ec2 import Images, LaunchTemplates, Volumes
-from tabulate import tabulate
-
 
 # Resource Types
 GROUPS = "security-groups"

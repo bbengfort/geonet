@@ -17,14 +17,11 @@ Lists the status of all instances in all regions.
 
 from commis import color
 from commis import Command
+from tabulate import tabulate
 
 from geonet.ec2 import Instance
 from geonet.region import Regions
 from geonet.config import settings
-from geonet.utils.async import wait
-
-from functools import partial
-from tabulate import tabulate
 
 
 ##########################################################################

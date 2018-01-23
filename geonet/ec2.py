@@ -16,7 +16,6 @@ Helpers for connecting to EC2 regions with boto
 ##########################################################################
 
 import os
-import pytz
 import boto3
 
 from geonet.config import settings
@@ -104,12 +103,15 @@ class Instance(Resource):
         for key in ("PublicIpAddress", "PrivateIpAddress"):
             if key in self:
                 return self[key]
-        return Nones
+        return None
 
     def uptime(self):
         """
         Returns the time since launch (not necessarily the time running)
         """
+        if self.state != Instance.RUNNING:
+            return None
+
         delta = utcnow() - self["LaunchTime"]
         return humanizedelta(seconds=delta.total_seconds())
 
@@ -299,6 +301,11 @@ class LaunchTemplate(Resource):
 class LaunchTemplates(Collection):
 
     RESOURCE = LaunchTemplate
+
+    def get_alia_template(self, region):
+        for template in self:
+            if template.name == "alia" and template.region == region:
+                return template
 
     def sort_latest(self):
         self.items.sort(key=itemgetter("CreateTime"), reverse=True)

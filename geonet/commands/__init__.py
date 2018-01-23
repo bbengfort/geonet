@@ -19,10 +19,14 @@ from .status import StatusCommand
 from .regions import RegionsCommand
 from .descr import DescribeCommand
 from .template import TemplateCommand
+from .launch import LaunchCommand
+from .list import ListCommand
+from .stop import StopCommand
+from .start import StartCommand
 
 
 # List of all commands
 COMMANDS = [
     ConfigCommand, StatusCommand, RegionsCommand, DescribeCommand,
-    TemplateCommand,
+    TemplateCommand, LaunchCommand, ListCommand, StopCommand, StartCommand,
 ]
