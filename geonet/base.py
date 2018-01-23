@@ -142,6 +142,9 @@ class Collection(MutableSequence):
         if isinstance(idx, int):
             return self.items[idx]
 
+        if isinstance(idx, Resource):
+            idx = str(idx) 
+
         if isinstance(idx, basestring):
             for item in self:
                 if str(item) == idx:

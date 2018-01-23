@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # geonet.ec2
 # Helpers for connecting to EC2 regions with boto
 #
@@ -52,6 +53,7 @@ class Instance(Resource):
 
     REQUIRED_KEYS = ('State', 'Tags')
 
+    # State constants
     PENDING       = 'pending'
     RUNNING       = 'running'
     SHUTTING_DOWN = 'shutting-down'
@@ -86,6 +88,9 @@ class Instance(Resource):
                 return self[key]
 
         return ""
+
+    def __str__(self):
+        return self["InstanceId"]
 
 
 class Instances(Collection):
@@ -129,6 +134,50 @@ class Instances(Collection):
 
 
 ##########################################################################
+## Volumes
+##########################################################################
+
+class Volume(Resource):
+
+    REQUIRED_KEYS = None
+    EXTRA_KEYS    = None
+    EXTRA_DEFAULT = None
+
+    # State constants
+    CREATING  = 'creating'
+    AVAILABLE = 'available'
+    IN_USE    = 'in-use'
+    DELETING  = 'deleting'
+    DELETED   = 'deleted'
+    ERROR     = 'error'
+
+    @property
+    def state(self):
+        return self["State"]
+
+    @property
+    def size(self):
+        return self["Size"]
+
+    def attached_to(self):
+        """
+        Returns instance id strings of any attachments
+        """
+        for attached in self["Attachments"]:
+            if attached["State"] in {"attached", "attaching"}:
+                yield attached["InstanceId"]
+
+
+    def __str__(self):
+        return self["VolumeId"]
+
+
+class Volumes(Collection):
+
+    RESOURCE = Volume
+
+
+##########################################################################
 ## Key Pairs
 ##########################################################################
 
@@ -165,6 +214,9 @@ class KeyPair(Resource):
             if oct(os.stat(path).st_mode & 0777) == '0600':
                 return True
         return False
+
+    def __str__(self):
+        return self.name
 
 
 class KeyPairs(Collection):

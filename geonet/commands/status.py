@@ -21,6 +21,9 @@ from commis import Command
 from geonet.ec2 import Instance
 from geonet.region import Regions
 from geonet.config import settings
+from geonet.utils.async import wait
+
+from functools import partial
 
 
 ##########################################################################
@@ -58,13 +61,11 @@ class StatusCommand(Command):
         Handles the config command with arguments from the command line.
         """
         # Load the regions list
-        regions = Regions.load_active()
+        regions = Regions.load()
 
-        for region in args.regions:
-
-            # Get region data
-            region = regions.find(region)
-            if region is None: continue
+        # Handle each region
+        for region in regions:
+            if str(region) not in args.regions: continue
 
             # Handle the status for the region
             self.handle_region(region, args)

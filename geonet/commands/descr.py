@@ -19,9 +19,10 @@ from commis import color
 from commis import Command
 from geonet.region import Regions
 from geonet.utils.timer import Timer
+from geonet.ec2 import Instance, Volume
 from geonet.utils.serialize import to_json
 from geonet.ec2 import SecurityGroups, KeyPairs
-from geonet.ec2 import Images, LaunchTemplates
+from geonet.ec2 import Images, LaunchTemplates, Volumes
 from tabulate import tabulate
 
 
@@ -30,11 +31,31 @@ GROUPS = "security-groups"
 TEMPLATES = "launch-templates"
 AMIS = "images"
 KEYS = "key-pairs"
+VOLUMES = "volumes"
 
 # Checks
 CHECKS = {
     True: color.format(u"✓", color.LIGHT_GREEN),
     False: color.format(u"✗", color.LIGHT_RED)
+}
+
+# States
+STATES = {
+    # Volume States
+    Volume.CREATING: color.format(u"●", color.YELLOW),
+    Volume.AVAILABLE: color.format(u"●", color.CYAN),
+    Volume.IN_USE: color.format(u"●", color.GREEN),
+    Volume.DELETING: color.format(u"●", color.LIGHT_BLUE),
+    Volume.DELETED: color.format(u"●", color.BLUE),
+    Volume.ERROR: color.format(u"●", color.RED),
+
+    # Instance States
+    Instance.PENDING: color.format(u"●", color.YELLOW),
+    Instance.RUNNING: color.format(u"●", color.GREEN),
+    Instance.SHUTTING_DOWN: color.format(u"●", color.CYAN),
+    Instance.TERMINATED: color.format(u"●", color.BLUE),
+    Instance.STOPPING: color.format(u"●", color.LIGHT_RED),
+    Instance.STOPPED: color.format(u"●", color.RED),
 }
 
 
@@ -58,6 +79,9 @@ def rtype(s):
 
     if s in {'k', 'keys', 'key-pair', KEYS}:
         return KEYS
+
+    if s in {'v', 'vols', 'volume', VOLUMES}:
+        return VOLUMES
 
 
 ##########################################################################
@@ -85,8 +109,8 @@ class DescribeCommand(Command):
             'action': 'store_true', 'help': 'use all regions not just active ones',
         },
         'resource': {
-            'choices': (GROUPS, TEMPLATES, AMIS, KEYS), 'type': rtype,
-            'help': 'name of resource type to describe',
+            'choices': (VOLUMES, GROUPS, TEMPLATES, AMIS, KEYS),
+            'type': rtype, 'help': 'name of resource type to describe',
         },
     }
 
@@ -103,6 +127,23 @@ class DescribeCommand(Command):
         if args.timer:
             print("request took {}".format(timer))
 
+    def handle_volumes(self, args):
+        """
+        Describe volumes in each region
+        """
+        volumes = self.regions.volumes()
+        if args.debug:
+            print(to_json(volumes, indent=2))
+
+        table = [["State", "Region", "Volume", "Name",  "Attached"]]
+
+        for volume in volumes:
+            table.append([
+                STATES[volume.state], volume.region.name, str(volume), volume.name,
+                ", ".join(list(volume.attached_to()))
+            ])
+
+        print(tabulate(table, tablefmt=args.format, headers='firstrow'))
 
     def handle_security_groups(self, args):
         """

@@ -23,9 +23,9 @@ from geonet.config import USERDATA
 from geonet.utils.async import wait
 from geonet.utils.serialize import Encoder
 from geonet.base import Collection, Resource
-from geonet.ec2 import KeyPairs,SecurityGroups
 from geonet.utils.timez import utcnow, parse_datetime
-from geonet.ec2 import Instances, Images, LaunchTemplates
+from geonet.ec2 import KeyPairs, SecurityGroups, Images
+from geonet.ec2 import Instances, Volumes, LaunchTemplates
 
 from operator import itemgetter
 
@@ -121,6 +121,14 @@ class Region(Resource):
                 instance['ReservationId'] = reservation['ReservationId']
                 instances.append(instance)
         return Instances(instances, region=self)
+
+    def volumes(self, **kwargs):
+        """
+        Returns all volumes associated with the region
+        """
+        # TODO: validate response
+        resp = self.conn.describe_volumes(**kwargs)
+        return Volumes(resp['Volumes'], region=self)
 
     def key_pairs(self, **kwargs):
         """
@@ -242,6 +250,14 @@ class Regions(Collection):
         """
         return Instances.collect(
             wait((region.instances for region in self), kwargs=kwargs)
+        )
+
+    def volumes(self, **kwargs):
+        """
+        Returns a collection of volumes across all regions.
+        """
+        return Volumes.collect(
+            wait((region.volumes for region in self), kwargs=kwargs)
         )
 
     def key_pairs(self, **kwargs):
