@@ -23,6 +23,7 @@ from geonet.base import Resource, Collection
 from geonet.utils.timez import parse_datetime
 from geonet.utils.timez import utcnow, humanizedelta
 
+from commis import color
 from collections import defaultdict
 from operator import itemgetter, attrgetter
 
@@ -61,6 +62,17 @@ class Instance(Resource):
     TERMINATED    = 'terminated'
     STOPPING      = 'stopping'
     STOPPED       = 'stopped'
+
+    # State light colors
+    STATE_COLORS = {
+        'pending': color.YELLOW,
+        'running': color.GREEN,
+        'shutting-down': color.CYAN,
+        'terminated': color.BLUE,
+        'stopping': color.LIGHT_RED,
+        'stopped': color.RED,
+    }
+
 
     def __init__(self, *args, **kwargs):
         super(Instance, self).__init__(*args, **kwargs)
@@ -114,6 +126,15 @@ class Instance(Resource):
 
         delta = utcnow() - self["LaunchTime"]
         return humanizedelta(seconds=delta.total_seconds())
+
+    def state_light(self, full=True):
+        """
+        Returns the colorized state light. If full is true, returns the name.
+        """
+        scolor = self.STATE_COLORS[self.state]
+        if full:
+            return color.format(u"● {}", scolor, self.state)
+        return color.format(u"●", scolor)
 
     def __str__(self):
         return self["InstanceId"]
@@ -194,6 +215,15 @@ class Volume(Resource):
     DELETED   = 'deleted'
     ERROR     = 'error'
 
+    STATE_COLORS = {
+        'creating': color.YELLOW,
+        'available': color.CYAN,
+        'in-use': color.GREEN,
+        'deleting': color.LIGHT_BLUE,
+        'deleted': color.BLUE,
+        'error': color.RED,
+    }
+
     @property
     def state(self):
         return self["State"]
@@ -209,6 +239,15 @@ class Volume(Resource):
         for attached in self["Attachments"]:
             if attached["State"] in {"attached", "attaching"}:
                 yield attached["InstanceId"]
+
+    def state_light(self, full=True):
+        """
+        Returns the colorized state light. If full is true, returns the name.
+        """
+        scolor = self.STATE_COLORS[self.state]
+        if full:
+            return color.format(u"● {}", scolor, self.state)
+        return color.format(u"●", scolor)
 
 
     def __str__(self):

@@ -34,6 +34,50 @@ REGIONDATA = os.path.join(USERDATA, "regions.json")
 
 
 ##########################################################################
+## Helper Function
+##########################################################################
+
+def parse_region(region, lookup=True):
+    """
+    Parses the region from the given input.
+
+    Parameters
+    ----------
+    region : object
+        Parses a region according to the input type as follows:
+        - basestring: returns a region from name
+        - Region: pass-through so that region classes are returned
+        - dict: instantiates a new region with the data
+
+    lookup : bool, default=True
+        If the region is a basestring or a Region class, all other information
+        about the region is populated from disk.
+
+    Returns
+    -------
+    region : Region
+        The region object, either fully or sparsely populated
+
+    raises : TypeError
+        If an unknown region type is passed in
+    """
+    if isinstance(region, Region):
+        if lookup:
+            return Region.from_name(str(region))
+        return region
+
+    if isinstance(region, basestring):
+        if lookup:
+            return Region.from_name(region)
+        return Region({"RegionName": region})
+
+    if isinstance(region, dict):
+        return Region(region)
+
+    raise TypeError("unparseable region type: {}".format(type(region)))
+
+
+##########################################################################
 ## Region object and collection
 ##########################################################################
 

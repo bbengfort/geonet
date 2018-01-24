@@ -19,26 +19,8 @@ from commis import color
 from commis import Command
 from tabulate import tabulate
 
-from geonet.ec2 import Instance
-from geonet.region import Regions
 from geonet.config import settings
-
-
-##########################################################################
-## Status Lights
-##########################################################################
-
-LIGHTS = {
-    Instance.PENDING: color.YELLOW,
-    Instance.RUNNING: color.GREEN,
-    Instance.SHUTTING_DOWN: color.CYAN,
-    Instance.TERMINATED: color.BLUE,
-    Instance.STOPPING: color.LIGHT_RED,
-    Instance.STOPPED: color.RED,
-}
-
-def instance_state_light(state):
-    return color.format(u"● {}", LIGHTS[state], state)
+from geonet.managed import ManagedInstances
 
 
 ##########################################################################
@@ -48,32 +30,40 @@ def instance_state_light(state):
 class StatusCommand(Command):
 
     name = "status"
-    help = "lists the status of all instances in all regions"
+    help = "lists the status of managed instances"
     args = {
         ('-r', '--regions'): {
             'choices': settings.regions, 'default': settings.regions,
             'metavar': 'REGION', 'nargs': "*",
             'help': 'specify regions to get the status for',
-        }
+        },
+        'instances': {
+            'nargs': '*', 'default': None, 'metavar': 'instance',
+            'help': 'specify the instances to list the status for',
+        },
     }
 
     def handle(self, args):
         """
         Handles the config command with arguments from the command line.
         """
-        # Load the regions list
-        regions = Regions(
-            region for region in Regions.load()
-            if str(region) in args.regions
-        )
+        # Load the instance manager
+        manager = ManagedInstances.load()
+
+        # Filter by regions
+        manager = manager.filter(args.regions, regions=True)
+
+        # Filter by instance ids
+        if args.instances:
+            manager = manager.filter(args.instances, instances=True)
 
         # Load the instances
-        instances = regions.instances()
+        instances = manager.status()
 
         # Create the region table
         table = [
             [
-                instance_state_light(instance.state),
+                instance.state_light(),
                 instance.region.name,
                 instance.name, str(instance),
                 instance.uptime()

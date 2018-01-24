@@ -39,25 +39,6 @@ CHECKS = {
     False: color.format(u"✗", color.LIGHT_RED)
 }
 
-# States
-STATES = {
-    # Volume States
-    Volume.CREATING: color.format(u"●", color.YELLOW),
-    Volume.AVAILABLE: color.format(u"●", color.CYAN),
-    Volume.IN_USE: color.format(u"●", color.GREEN),
-    Volume.DELETING: color.format(u"●", color.LIGHT_BLUE),
-    Volume.DELETED: color.format(u"●", color.BLUE),
-    Volume.ERROR: color.format(u"●", color.RED),
-
-    # Instance States
-    Instance.PENDING: color.format(u"●", color.YELLOW),
-    Instance.RUNNING: color.format(u"●", color.GREEN),
-    Instance.SHUTTING_DOWN: color.format(u"●", color.CYAN),
-    Instance.TERMINATED: color.format(u"●", color.BLUE),
-    Instance.STOPPING: color.format(u"●", color.LIGHT_RED),
-    Instance.STOPPED: color.format(u"●", color.RED),
-}
-
 
 ##########################################################################
 ## Helper Methods
@@ -139,11 +120,11 @@ class DescribeCommand(Command):
         if args.debug:
             print(to_json(instances, indent=2))
 
-        table = [["", "Region", "Instance", "Name", "Type", "IP Addr",]]
+        table = [["State", "Region", "Instance", "Name", "Type", "IP Addr",]]
 
         for instance in instances:
             table.append([
-                STATES[instance.state], instance.region.name, str(instance),
+                instance.state_light(), instance.region.name, str(instance),
                 instance.name, instance.vm_type, instance.ipaddr,
             ])
 
@@ -161,7 +142,8 @@ class DescribeCommand(Command):
 
         for volume in volumes:
             table.append([
-                STATES[volume.state], volume.region.name, str(volume), volume.name,
+                volume.state_light(), volume.region.name,
+                str(volume), volume.name,
                 ", ".join(list(volume.attached_to()))
             ])
 
