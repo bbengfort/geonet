@@ -29,4 +29,30 @@ The next step is to get a complete report about regions:
 
 Use `geonet regions --help` to see the available reporting commands. Note this could take a while as it will be querying AWS multiple times. This will print out a region report that lists the current state of your environment. You can activate regions for the rest of the app by using `geonet config -e` and you can set locale names (e.g. set `"US West 2"` to `"Oregon"`) by using `geonet regions -e`, which will allow you to edit the JSON description of the regions directly.
 
-Once you have activated the regions required for your experiment, you can start to create key pairs, security groups, launch templates, etc. with the various commands (if they're not set up already).
+Once you have activated the regions required for your experiment, you can start to create key pairs, security groups, and AMIs. Currently this is not supported from the command line, but will be soon. Ensure that you create these resources named with an `alia-` prefix so the app can find it. You can describe resources as follows:
+
+    $ geonet descr keys
+    $ geonet descr groups
+    $ geonet descr images
+
+Once these items have been created, create launch templates in each region as follows:
+
+    $ geonet template
+
+Note this command requires the alia prefixed keys, groups, and images and can only be run once. Soon this command will allow the creation of versioned templates.
+
+## Managing Instances
+
+Instances "under management" are instances that are specifically inspected in the `start`, `stop`, and `status` commands. They are created by the `launch` command and deleted with the `destroy` command, though you can manually edit the instances under management by using `geonet list -e`.
+
+Launching instances uses the template created in the previous step. To launch N instances in each region:
+
+    $ geonet launch N
+
+All instances launched will be added to the managed instances as well as renamed with an index and the location to ensure they are understandable. Once launched, inspect the status of instances with:
+
+    $ geonet status
+
+Finally you can use the `geonet stop` and `geonet start` commands to start and stop the instances on demand. Note, you'll be charged for running instances as well as any EBS volumes created!
+
+To destroy instances use the `geonet destroy` command, which terminates instances and then removes them from being under management. 
