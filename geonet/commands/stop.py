@@ -55,14 +55,11 @@ class StopCommand(Command):
         if args.instances:
             manager = manager.filter(args.instances, instances=True)
 
-        table = [
+        table = [['Region', 'Instance', 'State']]
+        table.extend([
             [
-                report["InstanceId"],
-                u"{} ➟ {}".format(
-                    report["PreviousState"]["Name"],
-                    report["CurrentState"]["Name"]
-                )
+                report.region.name, report["InstanceId"], unicode(report),
             ]
             for report in manager.stop()
-        ]
-        print(tabulate(table, tablefmt="plain"))
+        ])
+        print(tabulate(table, tablefmt="simple", headers='firstrow'))

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # geonet.managed
 # Maintains a list of instances to manage
 #
@@ -17,15 +18,17 @@ Maintains a list of instances to manage
 import os
 import json
 
-from geonet.ec2 import Instances
 from geonet.config import USERDATA
 from geonet.utils.async import wait
 from geonet.region import parse_region
+from geonet.ec2 import Instance, Instances
 from geonet.utils.serialize import Encoder
+from geonet.base import Resource, Collection
 from geonet.utils.timez import parse_datetime, utcnow
 
+from commis import color
+from collections import Set
 from functools import partial
-from collections import MutableSet
 from collections import defaultdict
 
 
@@ -35,7 +38,7 @@ INSTANCES  = os.path.join(USERDATA, "instances.json")
 ## Managed Instances
 ##########################################################################
 
-class ManagedInstances(MutableSet):
+class ManagedInstances(Set):
     """
     A set of instance ids that are under management by geonet. Underneath the
     datastructure is a mapping of regions to instances so that actions can be
@@ -97,36 +100,39 @@ class ManagedInstances(MutableSet):
         Stop all managed instances
         """
         def region_stop(region, instances, **kwds):
-            return region.conn.stop_instances(InstanceIds=instances, **kwds)
+            resp = region.conn.stop_instances(InstanceIds=instances, **kwds)
+            return StateChanges(resp['StoppingInstances'], region=region)
 
-        reports = wait((
+        return StateChanges.collect(wait((
             partial(region_stop, region, instances)
             for region, instances in self.regions()
-        ), kwargs=kwargs)
-
-        return [
-            status
-            for report in reports
-            for status in report["StoppingInstances"]
-        ]
+        ), kwargs=kwargs))
 
     def start(self, **kwargs):
         """
         Start all managed instances
         """
         def region_start(region, instances, **kwds):
-            return region.conn.start_instances(InstanceIds=instances, **kwds)
+            resp = region.conn.start_instances(InstanceIds=instances, **kwds)
+            return StateChanges(resp['StartingInstances'], region=region)
 
-        reports = wait((
+        return StateChanges.collect(wait((
             partial(region_start, region, instances)
             for region, instances in self.regions()
-        ), kwargs=kwargs)
+        ), kwargs=kwargs))
 
-        return [
-            status
-            for report in reports
-            for status in report["StartingInstances"]
-        ]
+    def terminate(self, **kwargs):
+        """
+        Terminate all managed instances
+        """
+        def region_terminate(region, instances, **kwds):
+            resp = region.conn.terminate_instances(InstanceIds=instances, **kwds)
+            return StateChanges(resp['TerminatingInstances'], region=region)
+
+        return StateChanges.collect(wait((
+            partial(region_terminate, region, instances)
+            for region, instances in self.regions()
+        ), kwargs=kwargs))
 
     def regions(self):
         """
@@ -183,17 +189,17 @@ class ManagedInstances(MutableSet):
             json.dump(self, f, cls=Encoder, indent=2)
 
     def add(self, instance, region):
-        if region is None:
-            raise ValueError("a region must be supplied")
-        self.data[region].add(instance)
+        self.data[parse_region(region)].add(instance)
 
     def discard(self, instance, region=None):
         if region:
-            self.data[region].discard(instance)
+            self.data[parse_region(region)].discard(instance)
         else:
+            # Search for instance to discard
             for instances in self.data.values():
                 if instance in instances:
                     instances.discard(instance)
+                    break
 
     def __iter__(self):
         for instances in self.data.values():
@@ -216,6 +222,42 @@ class ManagedInstances(MutableSet):
         return "{} instances in {} regions".format(
             len(self), len(self.data)
         )
+
+
+##########################################################################
+## State Changes
+##########################################################################
+
+class StateChange(Resource):
+
+    REQUIRED_KEYS = ('CurrentState', 'PreviousState', 'InstanceId')
+    EXTRA_KEYS    = None
+    EXTRA_DEFAULT = None
+
+    @property
+    def previous(self):
+        """
+        Returns the previous state
+        """
+        return self["PreviousState"]["Name"]
+
+    @property
+    def current(self):
+        """
+        Returns the current state
+        """
+        return self["CurrentState"]["Name"]
+
+    def __unicode__(self):
+        return u"{} ➟ {}".format(
+            color.format(self.previous, Instance.STATE_COLORS[self.previous]),
+            color.format(self.current, Instance.STATE_COLORS[self.current]),
+        )
+
+
+class StateChanges(Collection):
+
+    RESOURCE = StateChange
 
 
 if __name__ == '__main__':

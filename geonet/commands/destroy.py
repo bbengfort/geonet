@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # geonet.commands.destroy
 # Destroy all instances under management
 #
@@ -18,11 +19,9 @@ import sys
 
 from commis import color
 from commis import Command
+from tabulate import tabulate
 
-from geonet.region import Regions
 from geonet.managed import ManagedInstances
-
-from collections import defaultdict
 
 
 ##########################################################################
@@ -52,37 +51,47 @@ class DestroyCommand(Command):
 
         # Validate instances and create a new manager
         if args.instances:
-            regions = defaultdict(list)
             n_unmanaged = 0
-            # Validate instances are managed
             for instance in args.instances:
                 if instance not in manager:
                     n_unmanaged += 1
 
-                for region, instances in manager.regions():
-                    if instance in instances:
-                        regions[region].append(instance)
-                        break
-
+            # Cannot destroy any unmanaged instances
             if n_unmanaged > 0:
                 raise ValueError(
                     "cannot destroy {} unmanaged instances".format(n_unmanaged)
                 )
 
-            manager = ManagedInstances(regions)
+            # Filter the manager to the instances we'll be destroying
+            manager = manager.filter(args.instances, instances=True)
 
         # Prompt to confirm
         if not args.force:
-            if not self.prompt("destroy {}?".format(manager)):
-                print(color.format("stopping instance termination", color.LIGHT_YELLOW))
+            prompt = color.format("destroy {}?", color.LIGHT_YELLOW, manager)
+            if not self.prompt(prompt):
+                print(color.format("stopping instance termination", color.LIGHT_CYAN))
                 return
+            print(color.format(u"destroying {} instances …\n", color.LIGHT_RED, len(manager)))
 
         # Destroy instances
+        reports = manager.terminate()
 
         # Report destruction
+        table = [['Region', 'Instance', 'State']]
+        table.extend([
+            [
+                report.region.name, report["InstanceId"], unicode(report),
+            ]
+            for report in reports
+        ])
+        print(tabulate(table, tablefmt="simple", headers='firstrow'))
 
         # Remove instances from management
-
+        # Ensure we reload the full manager list and not use the filtered one.
+        manager = ManagedInstances.load()
+        for report in reports:
+            manager.discard(report["InstanceId"])
+        manager.dump()
 
     def prompt(self, prompt, default='no'):
         """
