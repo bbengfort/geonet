@@ -57,6 +57,12 @@ class StatusCommand(Command):
         if args.instances:
             manager = manager.filter(args.instances, instances=True)
 
+        # Return if no instances are managed
+        if len(manager) == 0:
+            return color.format(
+                "no instances under management", color.LIGHT_YELLOW
+            )
+
         # Load the instances
         instances = manager.status()
 

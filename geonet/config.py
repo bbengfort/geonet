@@ -69,6 +69,9 @@ class GeoNetConfiguration(Configuration):
     timezone = "UTC" # timezone for datetimes
     regions  = []    # regions to deploy replicas in
 
+    # Default instance type to launch 
+    instance_type = "t2.micro"
+
     # AWS Access Configuration
     aws = AWSAccessConfiguration()
 

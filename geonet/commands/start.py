@@ -15,6 +15,7 @@ Start instances under management
 ## Imports
 ##########################################################################
 
+from commis import color
 from commis import Command
 from tabulate import tabulate
 
@@ -55,6 +56,12 @@ class StartCommand(Command):
         if args.instances:
             manager = manager.filter(args.instances, instances=True)
 
+        # Return if no instances are managed
+        if len(manager) == 0:
+            return color.format(
+                "no instances under management", color.LIGHT_YELLOW
+            )
+
         table = [['Region', 'Instance', 'State']]
         table.extend([
             [
@@ -63,3 +70,5 @@ class StartCommand(Command):
             for report in manager.start()
         ])
         print(tabulate(table, tablefmt="simple", headers='firstrow'))
+
+        # TODO: update hosts information for SSH

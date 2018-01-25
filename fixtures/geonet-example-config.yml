@@ -8,6 +8,9 @@ timezone: 'UTC'
 # List regions to deploy replicas in
 regions: []
 
+# Default instance type to launcz
+instance_type: 't2.micro'
+
 # AWS Access Configuration (required)
 aws:
   # Leave commented out and set $AWS_OWNER_ID

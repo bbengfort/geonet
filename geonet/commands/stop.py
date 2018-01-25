@@ -15,6 +15,7 @@ Stop instances under management
 ## Imports
 ##########################################################################
 
+from commis import color
 from commis import Command
 from tabulate import tabulate
 
@@ -51,6 +52,12 @@ class StopCommand(Command):
         # Filter by regions
         manager = manager.filter(args.regions, regions=True)
 
+        # Return if no instances are managed
+        if len(manager) == 0:
+            return color.format(
+                "no instances under management", color.LIGHT_YELLOW
+            )
+
         # Filter by instance ids
         if args.instances:
             manager = manager.filter(args.instances, instances=True)
@@ -63,3 +70,5 @@ class StopCommand(Command):
             for report in manager.stop()
         ])
         print(tabulate(table, tablefmt="simple", headers='firstrow'))
+
+        # TODO: update hosts information for SSH

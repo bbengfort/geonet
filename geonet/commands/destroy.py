@@ -65,6 +65,12 @@ class DestroyCommand(Command):
             # Filter the manager to the instances we'll be destroying
             manager = manager.filter(args.instances, instances=True)
 
+        # Return if no instances are managed
+        if len(manager) == 0:
+            return color.format(
+                "no instances under management", color.LIGHT_YELLOW
+            )
+
         # Prompt to confirm
         if not args.force:
             prompt = color.format("destroy {}?", color.LIGHT_YELLOW, manager)
