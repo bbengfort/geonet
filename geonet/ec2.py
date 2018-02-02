@@ -117,6 +117,13 @@ class Instance(Resource):
                 return self[key]
         return None
 
+    @property
+    def hostname(self):
+        for key in ('PublicDnsName', 'PrivateDnsName'):
+            if key in self:
+                return self[key]
+        return None
+
     def uptime(self):
         """
         Returns the time since launch (not necessarily the time running)

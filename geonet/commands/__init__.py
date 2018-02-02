@@ -24,11 +24,12 @@ from .list import ListCommand
 from .stop import StopCommand
 from .start import StartCommand
 from .destroy import DestroyCommand
+from .hosts import HostsCommand
 
 
 # List of all commands
 COMMANDS = [
     ConfigCommand, StatusCommand, RegionsCommand, DescribeCommand,
     TemplateCommand, LaunchCommand, ListCommand, StopCommand, StartCommand,
-    DestroyCommand,
+    DestroyCommand, HostsCommand
 ]
