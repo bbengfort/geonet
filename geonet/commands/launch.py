@@ -42,7 +42,7 @@ class LaunchCommand(Command):
         ('-r', '--regions'): {
             'choices': settings.regions, 'default': settings.regions,
             'metavar': 'REGION', 'nargs': "*",
-            'help': 'specify regions to get the status for',
+            'help': 'specify regions in which to launch instances',
         },
         ('-t', '--type'): {
             'choices': INSTANCE_TYPES, 'default': settings.instance_type,

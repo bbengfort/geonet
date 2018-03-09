@@ -25,11 +25,17 @@ from .stop import StopCommand
 from .start import StartCommand
 from .destroy import DestroyCommand
 from .hosts import HostsCommand
+from .sgs import SecurityGroupCreateCommand
+from .sgs import SecurityGroupAuthCommand
+from .sgs import SecurityGroupDestroyCommand
+from .sgs import SecurityGroupRevokeCommand
 
 
 # List of all commands
 COMMANDS = [
     ConfigCommand, StatusCommand, RegionsCommand, DescribeCommand,
     TemplateCommand, LaunchCommand, ListCommand, StopCommand, StartCommand,
-    DestroyCommand, HostsCommand
+    DestroyCommand, HostsCommand, SecurityGroupCreateCommand,
+    SecurityGroupDestroyCommand, SecurityGroupAuthCommand,
+    SecurityGroupRevokeCommand,
 ]
