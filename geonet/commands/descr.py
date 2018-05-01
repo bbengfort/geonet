@@ -184,9 +184,12 @@ class DescribeCommand(Command):
 
         table = [["Region", "Template", "Name", "Version"]]
         for template in templates:
+            version = "v{} (r{})".format(
+                template.default_version, template.latest_version
+            )
+
             table.append([
-                template.region.name, str(template), template.name,
-                template.version
+                template.region.name, str(template), template.name, version,
             ])
 
         print(tabulate(table, tablefmt=args.format, headers='firstrow'))

@@ -16,6 +16,7 @@ Create and manage launch templates
 
 from commis import Command
 from geonet.region import Regions
+from geonet.config import settings
 from geonet.utils.async import wait
 
 from functools import partial
@@ -29,7 +30,17 @@ class TemplateCommand(Command):
 
     name = "template"
     help = "create and manage launch templates"
-    args = {}
+    args = {
+        ('-u', '--update'): {
+            'action': 'store_true',
+            'help': 'create new version of template instead of making a new one',
+        },
+        ('-r', '--reset'): {
+            'type':  int,
+            'default': None,
+            'help': 'reset to the specified version and delete later versions',
+        },
+    }
 
     def handle(self, args):
         """
@@ -42,6 +53,8 @@ class TemplateCommand(Command):
         """
         Handles each individual region template creation request.
         """
+        if args.reset:
+            return self.handle_region_reset(region, args)
 
         groups = region.security_groups().get_alia_groups()
         amis = region.images().sort_latest().get_alia_images()
@@ -58,7 +71,7 @@ class TemplateCommand(Command):
 
         data = {
             'ImageId': str(amis[0]),
-            'InstanceType': 't2.micro',
+            'InstanceType': settings.instance_type,
             'KeyName': str(keys[0]),
             'Monitoring': {'Enabled': False},
             'DisableApiTermination': False,
@@ -90,8 +103,38 @@ class TemplateCommand(Command):
             'SecurityGroupIds': [str(groups[0])],
         }
 
-        region.conn.create_launch_template(
-            LaunchTemplateName='alia',
-            VersionDescription="alia image '{}' launch template".format(amis[0].name),
-            LaunchTemplateData=data
+        if args.update:
+            resp = region.conn.create_launch_template_version(
+                LaunchTemplateName='alia',
+                VersionDescription="alia image '{}' launch template".format(amis[0].name),
+                LaunchTemplateData=data,
+            )
+
+            # Get the newly created version number and set as default.
+            version = str(resp['LaunchTemplateVersion']['VersionNumber'])
+            region.conn.modify_launch_template(
+                LaunchTemplateName='alia',
+                DefaultVersion=version,
+            )
+
+        else:
+            region.conn.create_launch_template(
+                LaunchTemplateName='alia',
+                VersionDescription="alia image '{}' launch template".format(amis[0].name),
+                LaunchTemplateData=data
+            )
+
+    def handle_region_reset(self, region, args):
+        """
+        Reset back to the specified version
+        """
+        resp = region.conn.modify_launch_template(
+            LaunchTemplateName='alia', DefaultVersion=str(args.reset),
+        )
+
+        latest = resp['LaunchTemplate']['LatestVersionNumber']
+        versions = map(str, range(args.reset+1, latest+1))
+
+        region.conn.delete_launch_template_versions(
+            LaunchTemplateName='alia', Versions=versions,
         )

@@ -337,8 +337,12 @@ class LaunchTemplate(Resource):
         return self["LaunchTemplateName"]
 
     @property
-    def version(self):
+    def latest_version(self):
         return int(self["LatestVersionNumber"])
+
+    @property
+    def default_version(self):
+        return int(self["DefaultVersionNumber"])
 
     def __str__(self):
         return self["LaunchTemplateId"]
