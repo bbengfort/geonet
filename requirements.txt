@@ -6,13 +6,16 @@ Fabric==1.14.0
 python-dateutil==2.6.1
 python-dotenv==0.7.1
 pytz==2017.3
+requests==2.19.0
 tabulate==0.8.2
 
 ## Subdependencies
 #asn1crypto==0.24.0
 #bcrypt==3.1.4
 #botocore==1.8.29
+#certifi==2018.4.16
 #cffi==1.11.4
+#chardet==3.0.4
 #click==6.7
 #colorama==0.3.6
 #cryptography==2.1.4
@@ -20,6 +23,7 @@ tabulate==0.8.2
 #enum34==1.1.6
 #futures==3.2.0
 #idna==2.6
+#invoke==1.0.0
 #ipaddress==1.0.19
 #jmespath==0.9.3
 #paramiko==2.4.0
@@ -28,9 +32,10 @@ tabulate==0.8.2
 #PyNaCl==1.2.1
 #PyYAML==3.11
 #s3transfer==0.1.12
+#urllib3==1.23
 
 ## Python Stuff
-#pip==9.0.1
+#pip==10.0.1
 #Python==2.7.13
 #setuptools==38.4.0
 #six==1.11.0
@@ -50,3 +55,6 @@ tabulate==0.8.2
 #pytest-cov==2.5.1
 #pytest-flakes==2.0.0
 #pytest==3.3.2
+
+## Local install
+#-e git+git@github.com:bbengfort/geonet.git@39ead4535b3cf4106572c9cd19c9fd8ec0369ab9#egg=geonet

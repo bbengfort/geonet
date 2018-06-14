@@ -201,6 +201,12 @@ class ManagedInstances(Set):
                     instances.discard(instance)
                     break
 
+    def get_region_for_instance(self, instance):
+        for region, instances in self.data.items():
+            if instance in instances:
+                return region
+        return None
+
     def __iter__(self):
         for instances in self.data.values():
             for instance in instances:

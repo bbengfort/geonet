@@ -48,6 +48,12 @@ load_dotenv()
 ## Primary Configuration
 ##########################################################################
 
+class KahuConfiguration(Configuration):
+
+    url = "https://kahu.bengfort.com"
+    api_key = environ_setting("KEKAHU_API_KEY", default="")
+
+
 class AWSAccessConfiguration(Configuration):
 
     aws_owner_id          = environ_setting("AWS_OWNER_ID", required=False, default="")
@@ -69,11 +75,14 @@ class GeoNetConfiguration(Configuration):
     timezone = "UTC" # timezone for datetimes
     regions  = []    # regions to deploy replicas in
 
-    # Default instance type to launch 
+    # Default instance type to launch
     instance_type = "t2.micro"
 
     # AWS Access Configuration
     aws = AWSAccessConfiguration()
+
+    # Kahu Configuration
+    kahu = KahuConfiguration()
 
 
 
