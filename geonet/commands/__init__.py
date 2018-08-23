@@ -31,6 +31,7 @@ from .sgs import SecurityGroupDestroyCommand
 from .sgs import SecurityGroupRevokeCommand
 from .kahu import KahuStatusCommand
 from .kahu import KahuListCommand
+from .kahu import KahuTokensCommand
 from .kahu import KahuCreateReplicaCommand
 
 
@@ -40,6 +41,6 @@ COMMANDS = [
     TemplateCommand, LaunchCommand, ListCommand, StopCommand, StartCommand,
     DestroyCommand, HostsCommand, SecurityGroupCreateCommand,
     SecurityGroupDestroyCommand, SecurityGroupAuthCommand,
-    SecurityGroupRevokeCommand, KahuStatusCommand, KahuListCommand,
-    KahuCreateReplicaCommand, 
+    SecurityGroupRevokeCommand, KahuStatusCommand, KahuListCommand, 
+    KahuTokensCommand, KahuCreateReplicaCommand,
 ]

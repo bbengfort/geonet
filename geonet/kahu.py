@@ -32,6 +32,7 @@ class Kahu(object):
     ENDPOINTS = {
         "status": "/api/status/",
         "replicas-list": "/api/replicas/",
+        "replicas-tokens": "/api/replicas/tokens/",
     }
 
     def __init__(self, url=None, api_key=None):
@@ -47,6 +48,12 @@ class Kahu(object):
 
     def replicas(self):
         url = self.get_endpoint("replicas-list")
+        res = requests.get(url, headers=self.get_headers())
+        res.raise_for_status()
+        return res.json()
+
+    def tokens(self):
+        url = self.get_endpoint("replicas-tokens")
         res = requests.get(url, headers=self.get_headers())
         res.raise_for_status()
         return res.json()

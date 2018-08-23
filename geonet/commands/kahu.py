@@ -15,6 +15,7 @@ CLI Interactions with the Kahu API
 ## Imports
 ##########################################################################
 
+import json
 import boto3
 
 from commis import color
@@ -58,10 +59,37 @@ class KahuListCommand(Command):
         table = [["PID", "Name", "IP Address", "Domain", "Port"]]
         for replica in replicas:
             table.append([
-                replica["pid"], replica["name"], replica["ipaddr"], replica["domain"], replica["port"]
+                replica["pid"], replica["name"], replica["ip_address"], replica["domain"], replica["port"]
             ])
 
         print(tabulate(table, tablefmt="simple", headers="firstrow"))
+
+
+class KahuTokensCommand(Command):
+
+    name = "kahu:tokens"
+    help = "fetch the replica API keys from Kahu"
+    args = {
+        ('-o', '--outpath'): {
+            'default': None,
+            'help': 'location to write the tokens to',
+        },
+        ('-i', '--indent'): {
+            'type': int, 'default': 2,
+            'help': "indent the json with spaces",
+        }
+    }
+
+    def handle(self, args):
+        kahu = Kahu()
+        tokens = kahu.tokens()
+
+        if args.outpath:
+            with open(args.outpath, 'w') as f:
+                json.dump(tokens, f, indent=args.indent)
+
+        else:
+            print(json.dumps(tokens, indent=args.indent))
 
 
 class KahuCreateReplicaCommand(Command):
@@ -153,7 +181,7 @@ class KahuCreateReplicaCommand(Command):
             "pid": pid,
             "name": name,
             "hostname": instance.private_dns_name.split(".")[0],
-            "ipaddr": instance.public_ip_address,
+            "ip_address": instance.public_ip_address,
             "domain": instance.public_dns_name,
             "description": description,
             "aws_instance": {
