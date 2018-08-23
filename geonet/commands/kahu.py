@@ -59,7 +59,8 @@ class KahuListCommand(Command):
         table = [["PID", "Name", "IP Address", "Domain", "Port"]]
         for replica in replicas:
             table.append([
-                replica["pid"], replica["name"], replica["ip_address"], replica["domain"], replica["port"]
+                replica["pid"], replica["name"], replica["ip_address"],
+                replica["domain"], replica["port"]
             ])
 
         print(tabulate(table, tablefmt="simple", headers="firstrow"))
@@ -90,6 +91,35 @@ class KahuTokensCommand(Command):
 
         else:
             print(json.dumps(tokens, indent=args.indent))
+
+
+class KahuActivateCommand(Command):
+
+    name = "kahu:activate"
+    help = "activate the replicas that geonet is managing and deactivate all others"
+    args = {
+        ('-D', '--deactivate'): {
+            'action': 'store_true',
+            'help': 'deactivate all replicas'
+        },
+        'replicas': {
+            'type': str, 'nargs': '*',
+            'help': 'names of the replicas to activate',
+        },
+    }
+
+    def handle(self, args):
+        kahu = Kahu()
+
+        if len(args.replicas) == 0 and not args.deactivate:
+            return color.format("specify replicas to activate or use --deactivate", color.LIGHT_YELLOW)
+
+        if args.deactivate and len(args.replicas) > 0:
+            print(color.format("warning: ignoring deactivate flag", color.LIGHT_YELLOW))
+
+        resp = kahu.activate(args.replicas)
+        print(color.format("{:>3} active replicas", color.LIGHT_GREEN, resp["activated"]))
+        print(color.format("{:>3} inactive replicas", color.LIGHT_RED, resp["deactivated"]))
 
 
 class KahuCreateReplicaCommand(Command):

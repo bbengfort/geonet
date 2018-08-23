@@ -33,6 +33,7 @@ from .kahu import KahuStatusCommand
 from .kahu import KahuListCommand
 from .kahu import KahuTokensCommand
 from .kahu import KahuCreateReplicaCommand
+from .kahu import KahuActivateCommand
 
 
 # List of all commands
@@ -41,6 +42,6 @@ COMMANDS = [
     TemplateCommand, LaunchCommand, ListCommand, StopCommand, StartCommand,
     DestroyCommand, HostsCommand, SecurityGroupCreateCommand,
     SecurityGroupDestroyCommand, SecurityGroupAuthCommand,
-    SecurityGroupRevokeCommand, KahuStatusCommand, KahuListCommand, 
-    KahuTokensCommand, KahuCreateReplicaCommand,
+    SecurityGroupRevokeCommand, KahuStatusCommand, KahuListCommand,
+    KahuTokensCommand, KahuCreateReplicaCommand, KahuActivateCommand
 ]

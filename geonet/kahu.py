@@ -33,6 +33,7 @@ class Kahu(object):
         "status": "/api/status/",
         "replicas-list": "/api/replicas/",
         "replicas-tokens": "/api/replicas/tokens/",
+        "replicas-geonet": "/api/replicas/geonet/",
     }
 
     def __init__(self, url=None, api_key=None):
@@ -55,6 +56,12 @@ class Kahu(object):
     def tokens(self):
         url = self.get_endpoint("replicas-tokens")
         res = requests.get(url, headers=self.get_headers())
+        res.raise_for_status()
+        return res.json()
+
+    def activate(self, replicas):
+        url = self.get_endpoint("replicas-geonet")
+        res = requests.post(url, headers=self.get_headers(), json=replicas)
         res.raise_for_status()
         return res.json()
 
@@ -83,3 +90,6 @@ class Kahu(object):
 
     def get_endpoint(self, name):
         return urljoin(self.base_url, self.ENDPOINTS[name])
+
+    def get_detail_endpoint(self, name, pk):
+        return urljoin(self.base_url, self.ENDPOINTS[name], pk)
