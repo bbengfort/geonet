@@ -107,6 +107,23 @@ def reset_dpkg():
     sudo("dpkg --configure -a")
 
 
+@task
+@parallel
+def install_ats_chrony():
+    """
+    Install Amazon Time Service with chrony
+    """
+    # Install Chrony
+    sudo("apt install chrony -y")
+
+    # Update the configuration to use the amazon time server
+    conf = os.path.join(os.path.dirname(__file__), "fixtures", "chrony.conf")
+    put(conf, "/etc/chrony/chrony.conf", use_sudo=True)
+
+    # Restart the time service
+    sudo("/etc/init.d/chrony restart")
+
+
 
 ##########################################################################
 ## Helper Functions
