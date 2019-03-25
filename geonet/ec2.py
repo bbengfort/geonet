@@ -118,6 +118,10 @@ class Instance(Resource):
         return None
 
     @property
+    def zone(self):
+        return self["Placement"]["AvailabilityZone"]
+
+    @property
     def hostname(self):
         for key in ('PublicDnsName', 'PrivateDnsName'):
             if key in self:
@@ -460,6 +464,51 @@ class SecurityGroup(Resource):
 class SecurityGroups(Collection):
 
     RESOURCE = SecurityGroup
+
+    def get_alia_groups(self):
+        """
+        Returns any security groups prefixed by alia.
+        """
+        return [
+            group for group in self
+            if group.name.startswith("alia")
+        ]
+
+
+##########################################################################
+## Placement Groups
+##########################################################################
+
+class PlacementGroup(Resource):
+
+    REQUIRED_KEYS = ["GroupName", "State", "Strategy"]
+    EXTRA_KEYS    = None
+    EXTRA_DEFAULT = None
+
+    @property
+    def name(self):
+        return self["GroupName"]
+
+    @property
+    def state(self):
+        return self["State"]
+
+    @property
+    def strategy(self):
+        return self["Strategy"]
+
+    def partition_count(self):
+        try:
+            return self["PartitionCount"]
+        except KeyError:
+            return None
+
+    def __str__(self):
+        return self.name
+
+class PlacementGroups(Collection):
+
+    RESOURCE = PlacementGroup
 
     def get_alia_groups(self):
         """

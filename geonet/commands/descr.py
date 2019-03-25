@@ -31,6 +31,8 @@ AMIS = "images"
 KEYS = "key-pairs"
 VOLUMES = "volumes"
 INSTANCES = "instances"
+PLACEMENTS = "placement-groups"
+ZONES = "availability-zones"
 
 
 # Checks
@@ -68,6 +70,12 @@ def rtype(s):
     if s in {'k', 'keys', 'key-pair', KEYS}:
         return KEYS
 
+    if s in {'p', 'pg', 'pgs', 'placement', 'placements', 'placement-group', PLACEMENTS}:
+        return PLACEMENTS
+
+    if s in {'z', 'az', 'azs', 'zone', 'zones', 'availability-zone', ZONES}:
+        return ZONES
+
 
 ##########################################################################
 ## Command Description
@@ -94,7 +102,7 @@ class DescribeCommand(Command):
             'action': 'store_true', 'help': 'use all regions not just active ones',
         },
         'resource': {
-            'choices': (INSTANCES, VOLUMES, GROUPS, TEMPLATES, AMIS, KEYS),
+            'choices': (INSTANCES, VOLUMES, GROUPS, TEMPLATES, AMIS, KEYS, PLACEMENTS, ZONES),
             'type': rtype, 'help': 'name of resource type to describe',
         },
     }
@@ -120,12 +128,12 @@ class DescribeCommand(Command):
         if args.debug:
             print(to_json(instances, indent=2))
 
-        table = [["State", "Region", "Instance", "Name", "Type", "IP Addr",]]
+        table = [["State", "Region", "Zone", "Instance", "Name", "Type", "IP Addr",]]
 
         for instance in instances:
             table.append([
-                instance.state_light(), instance.region.name, str(instance),
-                instance.name, instance.vm_type, instance.ipaddr,
+                instance.state_light(), instance.region.name, instance.zone,
+                str(instance), instance.name, instance.vm_type, instance.ipaddr,
             ])
 
         print(tabulate(table, tablefmt=args.format, headers='firstrow'))
@@ -168,6 +176,25 @@ class DescribeCommand(Command):
 
             table.append([
                 group.region.name, str(group), group.name, ports
+            ])
+
+        print(tabulate(table, tablefmt=args.format, headers='firstrow'))
+
+
+    def handle_placement_groups(self, args):
+        """
+        Describe placement groups in each region
+        """
+        groups = self.regions.placement_groups()
+        if args.debug:
+            print(to_json(groups, indent=2))
+            return
+
+        table = [["Region", "Name", "State", "Strategy", "Partition Count"]]
+
+        for group in groups:
+            table.append([
+                group.region.name, group.name, group.state, group.strategy, group.partition_count(),
             ])
 
         print(tabulate(table, tablefmt=args.format, headers='firstrow'))
@@ -226,6 +253,23 @@ class DescribeCommand(Command):
             table.append([
                 key.region.name, key.name, key.fingerprint,
                 CHECKS[key.has_valid_key()]
+            ])
+
+        print(tabulate(table, tablefmt=args.format, headers='firstrow'))
+
+    def handle_availability_zones(self, args):
+        """
+        Describe availability zones in each region
+        """
+        zones = self.regions.zones()
+        if args.debug:
+            print(to_json(zones, indent=2))
+            return
+
+        table = [["Region", "Name", "State", "Messages"]]
+        for zone in zones:
+            table.append([
+                zone.region.name, zone.name, zone.state, ", ".join(list(zone.messages()))
             ])
 
         print(tabulate(table, tablefmt=args.format, headers='firstrow'))

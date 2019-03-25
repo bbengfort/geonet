@@ -26,6 +26,8 @@ from geonet.base import Collection, Resource
 from geonet.utils.timez import utcnow, parse_datetime
 from geonet.ec2 import KeyPairs, SecurityGroups, Images
 from geonet.ec2 import Instances, Volumes, LaunchTemplates
+from geonet.ec2 import PlacementGroups
+from geonet.zone import AvailabilityZones
 
 from operator import itemgetter
 
@@ -156,6 +158,13 @@ class Region(Resource):
         """
         return self["RegionName"] in settings.regions
 
+    def zones(self, **kwargs):
+        """
+        Describe the availability zones in the region and their state
+        """
+        resp = self.conn.describe_availability_zones(**kwargs)
+        return AvailabilityZones(resp['AvailabilityZones'], region=self)
+
     def instances(self, **kwargs):
         """
         Returns all instances associated with the region
@@ -216,6 +225,13 @@ class Region(Resource):
         # TODO: validate repsonse
         resp = self.conn.describe_security_groups(**kwargs)
         return SecurityGroups(resp['SecurityGroups'], region=self)
+
+    def placement_groups(self, **kwargs):
+        """
+        REtursn the placement groups associated with the region.
+        """
+        resp = self.conn.describe_placement_groups(**kwargs)
+        return PlacementGroups(resp["PlacementGroups"], region=self)
 
 
 class Regions(Collection):
@@ -291,6 +307,14 @@ class Regions(Collection):
                 return region
         return None
 
+    def zones(self, **kwargs):
+        """
+        Returns a collection ofa vailability zones across all regions.
+        """
+        return AvailabilityZones.collect(
+            wait((region.zones for region in self), kwargs=kwargs)
+        )
+
     def instances(self, status=False, **kwargs):
         """
         Returns a collection of instances across all regions. If status is
@@ -342,6 +366,15 @@ class Regions(Collection):
         return SecurityGroups.collect(
             wait((region.security_groups for region in self), kwargs=kwargs)
         )
+
+    def placement_groups(self, **kwargs):
+        """
+        Returns the placement groups associated with the region.
+        """
+        return PlacementGroups.collect(
+            wait((region.placement_groups for region in self), kwargs=kwargs)
+        )
+
 
 
 if __name__ == '__main__':

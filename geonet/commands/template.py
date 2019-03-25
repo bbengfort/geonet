@@ -59,15 +59,23 @@ class TemplateCommand(Command):
         groups = region.security_groups().get_alia_groups()
         amis = region.images().sort_latest().get_alia_images()
         keys = region.key_pairs().get_alia_keys()
+        placements = region.placement_groups().get_alia_groups()
+        zones = region.zones().get_available()
 
         if len(groups) != 1:
             raise ValueError("not enough or too many security groups")
+
+        if len(placements) != 1:
+            raise ValueError("not enough or too many placement groups")
 
         if len(amis) == 0:
             raise ValueError("no latest AMI to build template from")
 
         if len(keys) != 1:
             raise ValueError("not enough or too many key pairs")
+
+        if len(zones) == 0:
+            raise ValueError("no available zones in {}".format(region.name))
 
         data = {
             'ImageId': str(amis[0]),
@@ -76,6 +84,10 @@ class TemplateCommand(Command):
             'Monitoring': {'Enabled': False},
             'DisableApiTermination': False,
             'InstanceInitiatedShutdownBehavior': 'terminate',
+            'Placement': {
+                'AvailabilityZone': zones[0].name,
+                'GroupName': placements[0].name,
+            },
             'TagSpecifications': [
                 {
                     'ResourceType': 'instance',
